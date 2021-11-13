@@ -28,10 +28,15 @@ client.on("messageCreate", (message) => {
   }
 
   const args = message.content.slice(prefix.length).split(" ");
+
   const command = args.shift().toLowerCase();
 
-  if (command === "hello") {
+  if (command === "hello" || command === "hi" || command === "hey") {
     client.commands.get("hello").execute(message, args);
+  }
+
+  if (command === "rule" || command === "rules") {
+    client.commands.get("rules").execute(message, args);
   }
 });
 

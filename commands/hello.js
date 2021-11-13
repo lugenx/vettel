@@ -3,6 +3,6 @@ module.exports = {
   description: "this is a first command",
   execute(message, args) {
     //???
-    message.channel.send("Hi!");
+    message.reply("Hi, " + message.author.username + ", how is it going?");
   },
 };
