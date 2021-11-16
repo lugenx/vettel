@@ -4,8 +4,8 @@ module.exports = {
   execute(message, args) {
     //???
     message.channel.send(
-      message.author.username +
-        ", please visit #rules channell to read all the server rules!"
+      //message.author.username +
+      ", please visit <#858369637443698698> channel to read all the server rules!"
     );
   },
 };
