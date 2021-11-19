@@ -1,9 +1,9 @@
 {
-  "name": "f1b",
+  "name": "vettel",
   "version": "1.0.0",
-  "description": "Formula 1 Boston Meetup group Discord Bot",
+  "description": "Discord Bot that answers Formula 1 questions",
   "main": "main.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

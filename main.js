@@ -19,7 +19,7 @@ for (const file of commandFiles) {
 }
 
 client.once("ready", function () {
-  console.log("f1b bot is now online");
+  console.log("Vettel is online!");
 });
 
 client.on("messageCreate", (message) => {
@@ -37,6 +37,10 @@ client.on("messageCreate", (message) => {
 
   if (command === "rule" || command === "rules") {
     client.commands.get("rules").execute(message, args);
+  }
+
+  if (command === "lastgp" || command === "recentgp") {
+    client.commands.get("lastgp").execute(message, args);
   }
 });
 
