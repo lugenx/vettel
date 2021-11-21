@@ -1,5 +1,5 @@
 //Import fetch from "node-fetch";
-//Problem with modules. Use one of the modules (ES or CommonJS) for both main and commands files.
+//Problem with modules. Use one of the modules (ES or CommonJS) for both main and commands files..
 module.exports = {
   name: "lastgp",
   description: "the last gp",
