@@ -1,4 +1,9 @@
-const { Client, Intents, Collection } = require("discord.js");
+import { Client, Intents, Collection } from "discord.js";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -6,20 +11,26 @@ const client = new Client({
 
 const prefix = "+";
 
-const fs = require("fs");
+import { readdirSync } from "fs";
 client.commands = new Collection();
 
-const commandFiles = fs
-  .readdirSync(__dirname + "/commands")
-  .filter((file) => file.endsWith(".js"));
+//commandFile is an array of directory files
 
-for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
-  client.commands.set(command.name, command);
-}
+client.once("ready", async () => {
+  try {
+    const commandFiles = readdirSync(__dirname + "/commands").filter((file) =>
+      file.endsWith(".mjs")
+    );
+    commandFiles.forEach(async (file) => {
+      const command = await import(`./commands/${file}`);
+      const { name } = await command;
 
-client.once("ready", function () {
-  console.log("Vettel is online!");
+      client.commands.set(name, command);
+      console.log("Vettel is now online!");
+    });
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 client.on("messageCreate", (message) => {

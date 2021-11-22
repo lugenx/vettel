@@ -1,3 +1,4 @@
+//This will be converted to ES module! Filename also should end with .mjs!
 module.exports = {
   name: "rules",
   description: "this command will send users to #rules channel",
