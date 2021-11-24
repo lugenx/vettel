@@ -21,7 +21,7 @@ client.once("ready", async () => {
     const commandFiles = readdirSync(__dirname + "/commands").filter((file) =>
       file.endsWith(".mjs")
     );
-    commandFiles.forEach(async (file) => {
+    commandFiles.map(async (file) => {
       const command = await import(`./commands/${file}`);
       const { name } = await command;
 
@@ -50,7 +50,13 @@ client.on("messageCreate", (message) => {
     client.commands.get("rules").execute(message, args);
   }
 
-  if (command === "lastgp" || command === "recentgp") {
+  if (
+    (command === "last" || command === "recent") &&
+    (args[0] === "gp" ||
+      args[0] === "race" ||
+      args[0] === "result" ||
+      args[0] === "results")
+  ) {
     client.commands.get("lastgp").execute(message, args);
   }
 });
