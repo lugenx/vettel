@@ -60,6 +60,10 @@ client.on("messageCreate", (message) => {
   ) {
     client.commands.get("lastgp").execute(message, args);
   }
+
+  if (command === "embed") {
+    client.commands.get("embed").execute(message, args);
+  }
 });
 
 client.login(process.env.BOT_TOKEN);
