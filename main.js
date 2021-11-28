@@ -1,6 +1,7 @@
 import { Client, Intents, Collection } from "discord.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import {} from "dotenv/config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -61,4 +62,4 @@ client.on("messageCreate", (message) => {
   }
 });
 
-client.login("OTA2NTYxODAyMTMxODk0MzQy.YYabeA.r9gvz2j6rcFirVtrEKJHXs8q5SQ");
+client.login(process.env.BOT_TOKEN);
