@@ -64,6 +64,10 @@ client.on("messageCreate", (message) => {
   if (command === "embed") {
     client.commands.get("embed").execute(message, args);
   }
+
+  if (command === "result") {
+    client.commands.get("result").execute(message, args);
+  }
 });
 
 client.login(process.env.BOT_TOKEN);
