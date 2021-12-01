@@ -43,6 +43,18 @@ client.on("messageCreate", (message) => {
 
   const command = args.shift().toLowerCase();
 
+  if (
+    command === "why" &&
+    (args[0] === "vettel" ||
+      (args[0] === "your" &&
+        args[1] === "name" &&
+        args[2] === "is" &&
+        args[3] === "vettel") ||
+      (args[0] === "this" && args[1] === "name"))
+  ) {
+    client.commands.get("why").execute(message, args);
+  }
+
   if (command === "hello" || command === "hi" || command === "hey") {
     client.commands.get("hello").execute(message, args);
   }
@@ -67,6 +79,14 @@ client.on("messageCreate", (message) => {
 
   if (command === "result") {
     client.commands.get("result").execute(message, args);
+  }
+
+  if (command === "podium") {
+    client.commands.get("podium").execute(message, args);
+  }
+
+  if (command === "winner") {
+    client.commands.get("winner").execute(message, args);
   }
 });
 

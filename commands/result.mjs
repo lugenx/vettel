@@ -28,8 +28,7 @@ export function execute(message, args) {
     }
 
     message.channel.send(
-      //fix the wording
-      `Most recent race was **${season} ${gpName}**. \nHere is the results: \n ${driversResultList.join(
+      `Here is the result of **${season} ${gpName}**. \n ${driversResultList.join(
         " \n"
       )}`
     );

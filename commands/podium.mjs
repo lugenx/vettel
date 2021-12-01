@@ -1,10 +1,11 @@
 import fetch from "node-fetch";
-export const name = "lastgp";
-export const description = "the last gp";
+export const name = "podium";
+export const description =
+  "This command will give a podium for specific year and gp";
 export function execute(message, args) {
   async function result() {
     const response = await fetch(
-      "https://ergast.com/api/f1/current/last/results.json"
+      "https://ergast.com/api/f1/" + args[0] + "/" + args[1] + "/results.json"
     );
 
     const data = await response.json();
@@ -15,17 +16,26 @@ export function execute(message, args) {
 
     const driversResultList = [];
 
-    for (let r = 0; r < raceResults.length; r++) {
+    for (let r = 0; r < 3; r++) {
       let time = raceResults[r].hasOwnProperty("Time")
         ? raceResults[r].Time.time
         : raceResults[r].status;
       driversResultList.push(
-        r + 1 + " " + raceResults[r].Driver.familyName + " " + "(" + time + ")"
+        r +
+          1 +
+          " " +
+          raceResults[r].Driver.givenName +
+          " " +
+          raceResults[r].Driver.familyName +
+          " (" +
+          raceResults[r].Constructor.name +
+          ") " +
+          time
       );
     }
 
     message.channel.send(
-      `Most recent race was **${season} ${gpName}**. \nHere is the result: \n ${driversResultList.join(
+      `Here is the podium of **${season} ${gpName}**. \n ${driversResultList.join(
         " \n"
       )}`
     );
