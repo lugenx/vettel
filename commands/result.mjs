@@ -1,5 +1,3 @@
-//test all cases apply to other commands if needed
-
 import fetch from "node-fetch";
 export const name = "result";
 export const description =
@@ -13,7 +11,7 @@ export function execute(message, args) {
     args[1] !== "last"
   ) {
     return message.channel.send(
-      "Enter a `year` after the `+result`, then a keyword to identify a Grand Prix.\n*For example:* `+result 2011 canada`, or `+result 1971 monza` or the round of Grand Prix. *For example:*  `+result 2007 4`\nYou can use `current` for the year and `last` for the round of GP if you want to check most recent race quickly.\n*For example:*`+result current last`. Learn more by using `+help` command."
+      `Enter a \`YEAR\` after the \`+result\`, then a keyword to identify a Grand Prix.\n*For example:* \`+result 2011 canada\`, or \`+result 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the round of GP if you want to check most recent race quickly.\n*For example:*\`+result current last\`. Learn more by using \`+help\` command.`
     );
   } else if (
     args[0] > currentYear &&
@@ -35,17 +33,16 @@ export function execute(message, args) {
 
       if (args[1] === "last") {
         round = args[1];
-      } else if (args[1] === undefined) {
+      } else if (args[1] === undefined || !isNaN(args[1])) {
         return message.channel.send(
-          "Enter a keyword to identify a Grand Prix after the `+result year`\n*For example:* `+result 2011 canada`, or `+result 1971 monza` or the round of Grand Prix. *For example:*  `+result 2007 4`\nYou can use `current` for the year and `last` for the round of GP if you want to check most recent race quickly.\n*For example:*`+result current last`. Learn more by using `+help` command."
+          `Enter a keyword to identify a Grand Prix after the \`+result ${args[0]}\`\n*For example:* \`+result ${args[0]} british\`, or \`+result ${args[0]} monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`+result current last\`. Learn more by using \`+help\` command.`
         );
       } else {
         for (let i = 0; i < races.length; i++) {
           if (
             reg.test(races[i].raceName) ||
             reg.test(races[i].Circuit.circuitName) ||
-            reg.test(races[i].Circuit.Location.country) ||
-            reg.test(races[i].round)
+            reg.test(races[i].Circuit.Location.country)
           ) {
             round = races[i].round;
           }
