@@ -11,7 +11,7 @@ export function execute(message, args) {
     args[1] !== "last"
   ) {
     return message.channel.send(
-      `Enter a \`YEAR\` after the \`+podium\`, then a keyword to identify a Grand Prix.\n*For example:* \`+podium 2011 canada\`, or \`+podium 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the round of GP if you want to check most recent race quickly.\n*For example:*\`+podium current last\`. Learn more by using \`+help\` command.`
+      `Enter a \`YEAR\` after the \`${message}\`, then a keyword to identify a Grand Prix.\n*For example:* \`${message} 2011 canada\`, or \`${message} 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`${message} current last\`. Learn more by using \`+help\` command.`
     );
   } else if (
     args[0] > currentYear &&

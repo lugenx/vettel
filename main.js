@@ -18,6 +18,7 @@ client.commands = new Collection();
 //commandFile is an array of directory files
 
 client.once("ready", async () => {
+  console.log("Vettel is now online!");
   try {
     const commandFiles = readdirSync(__dirname + "/commands").filter((file) =>
       file.endsWith(".mjs")
@@ -27,7 +28,6 @@ client.once("ready", async () => {
       const { name } = await command;
 
       client.commands.set(name, command);
-      console.log("Vettel is now online!");
     });
   } catch (err) {
     console.error(err);
@@ -43,15 +43,7 @@ client.on("messageCreate", (message) => {
 
   const command = args.shift().toLowerCase();
 
-  if (
-    command === "why" &&
-    (args[0] === "vettel" ||
-      (args[0] === "your" &&
-        args[1] === "name" &&
-        args[2] === "is" &&
-        args[3] === "vettel") ||
-      (args[0] === "this" && args[1] === "name"))
-  ) {
+  if (command === "why") {
     client.commands.get("why").execute(message, args);
   }
 
@@ -63,21 +55,15 @@ client.on("messageCreate", (message) => {
     client.commands.get("rules").execute(message, args);
   }
 
-  if (
-    (command === "last" || command === "recent") &&
-    (args[0] === "gp" ||
-      args[0] === "race" ||
-      args[0] === "result" ||
-      args[0] === "results")
-  ) {
-    client.commands.get("lastgp").execute(message, args);
+  if (command === "last" || command === "latest" || command === "recent") {
+    client.commands.get("last").execute(message, args);
   }
 
   if (command === "embed") {
     client.commands.get("embed").execute(message, args);
   }
 
-  if (command === "result") {
+  if (command === "result" || command === "results" || command === "race") {
     client.commands.get("result").execute(message, args);
   }
 
