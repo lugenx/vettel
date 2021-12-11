@@ -74,6 +74,10 @@ client.on("messageCreate", (message) => {
   if (command === "winner") {
     client.commands.get("winner").execute(message, args);
   }
+
+  if (command === "qualifying" || command === "quali") {
+    client.commands.get("qualifying").execute(message, args);
+  }
 });
 
 client.login(process.env.BOT_TOKEN);

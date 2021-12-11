@@ -1,7 +1,6 @@
 import fetch from "node-fetch";
-export const name = "podium";
-export const description =
-  "This command will give a podium for specific year and gp";
+export const name = "qualifying";
+export const description = "This command will give qualifying results of a gp";
 export function execute(message, args) {
   let currentYear = new Date().getFullYear();
 
@@ -11,7 +10,7 @@ export function execute(message, args) {
     args[1] !== "last"
   ) {
     return message.channel.send(
-      `Enter a \`YEAR\` after the \`${message}\`, then a keyword to identify a Grand Prix.\n*For example:* \`${message} 2011 canada\`, or \`${message} 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`${message} current last\`. Learn more by using \`+help\` command.`
+      `Enter a \`YEAR\` after the \`${message.content}\`, then a keyword to identify a Grand Prix.\n*For example:* \`${message.content} 2011 canada\`, or \`${message.content} 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent qualifying result quickly.\n*For example:*\`${message.content} current last\`. Learn more by using \`+help\` command.`
     );
   } else if (
     args[0] > currentYear &&
@@ -19,7 +18,7 @@ export function execute(message, args) {
     args[0] !== undefined &&
     args[0].length === 4
   ) {
-    return message.channel.send(`${args[0]}? Really?`);
+    return message.channel.send(`${args[0]}? Honestly... How do I know?`);
   } else {
     async function result() {
       try {
@@ -36,7 +35,7 @@ export function execute(message, args) {
           round = args[1];
         } else if (args[1] === undefined || !isNaN(args[1])) {
           return message.channel.send(
-            `Enter a keyword to identify a Grand Prix after the \`+podium ${args[0]}\`\n*For example:* \`+podium ${args[0]} british\`, or \`+podium ${args[0]} monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`+podium current last\`. Learn more by using \`+help\` command.`
+            `Enter a keyword to identify a Grand Prix after the \`${message}\`\n*For example:* \`${message.content} british\`, or \`${message.content} monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent qualifying result quickly.\n*For example:*\`${message.content} current last\`. Learn more by using \`+help\` command.`
           );
         } else {
           for (let i = 0; i < races.length; i++) {
@@ -57,43 +56,46 @@ export function execute(message, args) {
         }
 
         const secondResponse = await fetch(
-          "https://ergast.com/api/f1/" + args[0] + "/" + round + "/results.json"
+          "https://ergast.com/api/f1/" +
+            args[0] +
+            "/" +
+            round +
+            "/qualifying.json"
         );
 
         const secondData = await secondResponse.json();
         const race = await secondData.MRData.RaceTable.Races[0];
-        const raceResults = await race.Results;
+        const qualiResults = await race.QualifyingResults;
         const gpName = await race.raceName;
         const season = await race.season;
 
         const driversResultList = [];
 
-        for (let r = 0; r < 3; r++) {
-          let time = raceResults[r].hasOwnProperty("Time")
-            ? raceResults[r].Time.time
-            : raceResults[r].status;
+        for (let r = 0; r < qualiResults.length; r++) {
+          let driverQualiResult = qualiResults[r].hasOwnProperty("Q3")
+            ? qualiResults[r].Q3 + " (Q3)"
+            : qualiResults[r].hasOwnProperty("Q2")
+            ? qualiResults[r].Q2 + " (Q2)"
+            : qualiResults[r].hasOwnProperty("Q1")
+            ? qualiResults[r].Q1 + " (Q1)"
+            : "No Time"; //raceResults[r].status;
           driversResultList.push(
-            r +
-              1 +
+            `${r + 1}`.padEnd(2, " ") +
               " " +
-              raceResults[r].Driver.givenName +
+              qualiResults[r].Driver.familyName.padEnd(10, " ") +
               " " +
-              raceResults[r].Driver.familyName +
-              " (" +
-              raceResults[r].Constructor.name +
-              ") " +
-              time
+              driverQualiResult
           );
         }
 
         message.channel.send(
-          `Here is the podium of **${season} ${gpName}**. \n ${driversResultList.join(
+          `Here is the **Qualifying** result of **${season} ${gpName}**. \n ${driversResultList.join(
             " \n"
           )}`
         );
-      } catch (error) {
+      } catch (err) {
         console.log(err);
-        message.channel.send("hmm :thinking:");
+        message.channel.send("hmm... :thinking:");
       }
     }
     return result();

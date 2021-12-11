@@ -22,59 +22,64 @@ export function execute(message, args) {
     return message.channel.send(`${args[0]}? Honestly... Are you kidding me?`);
   } else {
     async function result() {
-      const firstResponse = await fetch(
-        "https://ergast.com/api/f1/" + args[0] + ".json"
-      );
-
-      let reg = new RegExp(`${args[1]}`, "i");
-      let round;
-      let firstData = await firstResponse.json();
-      const races = await firstData.MRData.RaceTable.Races;
-
-      if (args[1] === "last") {
-        round = args[1];
-      } else if (args[1] === undefined || !isNaN(args[1])) {
-        return message.channel.send(
-          `Enter a keyword to identify a Grand Prix after the \`+winner ${args[0]}\`\n*For example:* \`+winner ${args[0]} british\`, or \`+winner ${args[0]} monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`+winner current last\`. Learn more by using \`+help\` command.`
+      try {
+        const firstResponse = await fetch(
+          "https://ergast.com/api/f1/" + args[0] + ".json"
         );
-      } else {
-        for (let i = 0; i < races.length; i++) {
-          if (
-            reg.test(races[i].raceName) ||
-            reg.test(races[i].Circuit.circuitName) ||
-            reg.test(races[i].Circuit.Location.country)
-          ) {
-            round = races[i].round;
+
+        let reg = new RegExp(`${args[1]}`, "i");
+        let round;
+        let firstData = await firstResponse.json();
+        const races = await firstData.MRData.RaceTable.Races;
+
+        if (args[1] === "last") {
+          round = args[1];
+        } else if (args[1] === undefined || !isNaN(args[1])) {
+          return message.channel.send(
+            `Enter a keyword to identify a Grand Prix after the \`+winner ${args[0]}\`\n*For example:* \`+winner ${args[0]} british\`, or \`+winner ${args[0]} monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`+winner current last\`. Learn more by using \`+help\` command.`
+          );
+        } else {
+          for (let i = 0; i < races.length; i++) {
+            if (
+              reg.test(races[i].raceName) ||
+              reg.test(races[i].Circuit.circuitName) ||
+              reg.test(races[i].Circuit.Location.country)
+            ) {
+              round = races[i].round;
+            }
+          }
+
+          if (round === undefined && args[0] <= currentYear) {
+            return message.channel.send(
+              `I don't think there was a ${args[1]} race in ${args[0]}!`
+            );
           }
         }
 
-        if (round === undefined && args[0] <= currentYear) {
-          return message.channel.send(
-            `I don't think there was a ${args[1]} race in ${args[0]}!`
-          );
-        }
+        const secondResponse = await fetch(
+          "https://ergast.com/api/f1/" + args[0] + "/" + round + "/results.json"
+        );
+
+        const secondData = await secondResponse.json();
+        const race = await secondData.MRData.RaceTable.Races[0];
+        const raceResults = await race.Results;
+        const gpName = await race.raceName;
+        const season = await race.season;
+
+        const winnerName =
+          raceResults[0].Driver.givenName +
+          " " +
+          raceResults[0].Driver.familyName;
+        const winnerTeam = raceResults[0].Constructor.name;
+        const winnerFinishTime = raceResults[0].Time.time;
+
+        message.channel.send(
+          `The winner of ${season} ${gpName} is **${winnerName}** from ${winnerTeam}. He crossed the finish line in ${winnerFinishTime}.`
+        );
+      } catch (err) {
+        console.log(err);
+        message.channel.send("hmm... :thinking:");
       }
-
-      const secondResponse = await fetch(
-        "https://ergast.com/api/f1/" + args[0] + "/" + round + "/results.json"
-      );
-
-      const secondData = await secondResponse.json();
-      const race = await secondData.MRData.RaceTable.Races[0];
-      const raceResults = await race.Results;
-      const gpName = await race.raceName;
-      const season = await race.season;
-
-      const winnerName =
-        raceResults[0].Driver.givenName +
-        " " +
-        raceResults[0].Driver.familyName;
-      const winnerTeam = raceResults[0].Constructor.name;
-      const winnerFinishTime = raceResults[0].Time.time;
-
-      message.channel.send(
-        `The winner of ${season} ${gpName} is **${winnerName}** from ${winnerTeam}. He crossed the finish line in ${winnerFinishTime}.`
-      );
     }
     return result();
   }
