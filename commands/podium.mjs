@@ -11,7 +11,15 @@ export function execute(message, args) {
     args[1] !== "last"
   ) {
     return message.channel.send(
-      `Enter a \`YEAR\` after the \`${message}\`, then a keyword to identify a Grand Prix.\n*For example:* \`${message} 2011 canada\`, or \`${message} 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`${message} current last\`. Learn more by using \`+help\` command.`
+      `Enter a \`YEAR\` after the \`${
+        message.content.split(" ")[0]
+      }\`, then a keyword to identify a Grand Prix.\n*For example:* \`${
+        message.content.split(" ")[0]
+      } 2011 canada\`, or \`${
+        message.content.split(" ")[0]
+      } 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`${
+        message.content.split(" ")[0]
+      } current last\`. Learn more by using \`+help\` command.`
     );
   } else if (
     args[0] > currentYear &&
@@ -91,7 +99,7 @@ export function execute(message, args) {
             " \n"
           )}`
         );
-      } catch (error) {
+      } catch (err) {
         console.log(err);
         message.channel.send("hmm :thinking:");
       }
