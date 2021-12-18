@@ -78,6 +78,10 @@ client.on("messageCreate", (message) => {
   if (command === "qualifying" || command === "quali") {
     client.commands.get("qualifying").execute(message, args);
   }
+
+  if (command === "wdc" || command === "champion" || command === "champ") {
+    client.commands.get("wdc").execute(message, args);
+  }
 });
 
 client.login(process.env.BOT_TOKEN);
