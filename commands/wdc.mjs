@@ -1,4 +1,5 @@
-//fix it
+//TODO: "+wdc current" will show current champion. Make sure API doesnt give first place as a champ in the middle of the season.
+//also make sure entering current year like "+wdc 2022" will not give the first place before season finish.
 import fetch from "node-fetch";
 export const name = "wdc";
 export const description =
@@ -11,7 +12,13 @@ export function execute(message, args) {
     args[0] !== "current"
   ) {
     return message.channel.send(
-      `Enter a \`YEAR\` after the \`+wdc\`,\n*For example:* \`+wdc 1988\`, \nYou can use \`current\` for the year to check most recent world champion quickly.\n*For example:*\`+wdc current\`. Learn more by using \`+help\` command.`
+      `Enter a \`YEAR\` after the \`${
+        message.content.split(" ")[0]
+      }\`,\n*For example:* \`${
+        message.content.split(" ")[0]
+      } 1988\`, \nYou can use \`current\` for the year to check most recent world champion quickly.\n*For example:*\`${
+        message.content.split(" ")[0]
+      } current\`. Learn more by using \`+help\` command.`
     );
   } else if (
     args[0] > currentYear &&
@@ -26,29 +33,31 @@ export function execute(message, args) {
     async function result() {
       try {
         const response = await fetch(
-          "https://ergast.com/api/f1/driverstandings/1.json"
+          "https://ergast.com/api/f1/driverstandings/1.json?limit=300&offset=0"
         );
 
         const data = await response.json();
         const table = await data.MRData.StandingsTable;
         const allSeasons = await table.StandingsLists;
         let askedSeason;
-        //TODO: loop doesnt work. Fix it.
+
         for (let s = 0; s < allSeasons.length; s++) {
           if (allSeasons[s].season == args[0]) {
             askedSeason = await allSeasons[s];
           }
         }
         const seasonYear = await askedSeason.season;
-        console.log("seasonYear: " + seasonYear);
+
         const wdc = await askedSeason.DriverStandings[0];
         const wdcTeam = await wdc.Constructors[0].name;
         const wdcNationality = await wdc.Driver.nationality;
         const wdcTotalWins = await wdc.wins;
         const wdcFullName =
           (await wdc.Driver.givenName) + " " + wdc.Driver.familyName;
+        const totalRaces = await askedSeason.round;
+
         message.channel.send(
-          `The world drivers' champion of the ${seasonYear} season is ${wdcNationality} driver **${wdcFullName}** from the ${wdcTeam} team. He won a total of ${wdcTotalWins} races of the season`
+          `The world drivers' champion of the ${seasonYear} season is ${wdcNationality} driver **${wdcFullName}** from the ${wdcTeam} team. He won a total of ${wdcTotalWins} out of ${totalRaces} races of the season.`
         );
       } catch (err) {
         console.log(err);
