@@ -15,7 +15,7 @@ const prefix = "+";
 import { readdirSync } from "fs";
 client.commands = new Collection();
 
-//commandFile is an array of directory files
+//commandFiles is an array of directory files
 
 client.once("ready", async () => {
   console.log("Vettel is now online!");
@@ -81,6 +81,14 @@ client.on("messageCreate", (message) => {
 
   if (command === "wdc" || command === "champion" || command === "champ") {
     client.commands.get("wdc").execute(message, args);
+  }
+
+  if (
+    command === "standings" ||
+    command === "standing" ||
+    command === "stand"
+  ) {
+    client.commands.get("standings").execute(message, args);
   }
 });
 

@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 export const name = "qualifying";
 export const description = "This command will give qualifying results of a gp";
 export function execute(message, args) {
+  let command = message.content.split(" ")[0];
   let currentYear = new Date().getFullYear();
 
   if (
@@ -10,15 +11,7 @@ export function execute(message, args) {
     args[1] !== "last"
   ) {
     return message.channel.send(
-      `Enter a \`YEAR\` after the \`${
-        message.content.split(" ")[0]
-      }\`, then a keyword to identify a Grand Prix.\n*For example:* \`${
-        message.content.split(" ")[0]
-      } 2011 canada\`, or \`${
-        message.content.split(" ")[0]
-      } 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent qualifying result quickly.\n*For example:*\`${
-        message.content.split(" ")[0]
-      } current last\`. Learn more by using \`+help\` command.`
+      `Enter a \`YEAR\` after the \`${command}\`, then a keyword to identify a Grand Prix.\n*For example:* \`${command} 2011 canada\`, or \`${command} 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent qualifying result quickly.\n*For example:*\`${command} current last\`. Learn more by using \`+help\` command.`
     );
   } else if (
     args[0] > currentYear &&

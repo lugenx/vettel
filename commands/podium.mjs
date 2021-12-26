@@ -3,36 +3,29 @@ export const name = "podium";
 export const description =
   "This command will give a podium for specific year and gp";
 export function execute(message, args) {
+  let command = message.content.split(" ")[0];
   let currentYear = new Date().getFullYear();
-
+  let askedYear = args[0];
   if (
-    (args[0] === undefined || args[0].length !== 4 || isNaN(args[0])) &&
-    args[0] !== "current" &&
+    (askedYear === undefined || askedYear.length !== 4 || isNaN(askedYear)) &&
+    askedYear !== "current" &&
     args[1] !== "last"
   ) {
     return message.channel.send(
-      `Enter a \`YEAR\` after the \`${
-        message.content.split(" ")[0]
-      }\`, then a keyword to identify a Grand Prix.\n*For example:* \`${
-        message.content.split(" ")[0]
-      } 2011 canada\`, or \`${
-        message.content.split(" ")[0]
-      } 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`${
-        message.content.split(" ")[0]
-      } current last\`. Learn more by using \`+help\` command.`
+      `Enter a \`YEAR\` after the \`${command}\`, then a keyword to identify a Grand Prix.\n*For example:* \`${command} 2011 canada\`, or \`${command} 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`${command} current last\`. Learn more by using \`+help\` command.`
     );
   } else if (
-    args[0] > currentYear &&
-    !isNaN(args[0]) &&
-    args[0] !== undefined &&
-    args[0].length === 4
+    askedYear > currentYear &&
+    !isNaN(askedYear) &&
+    askedYear !== undefined &&
+    askedYear.length === 4
   ) {
-    return message.channel.send(`${args[0]}? Really?`);
+    return message.channel.send(`${askedYear}? Really?`);
   } else {
     async function result() {
       try {
         const firstResponse = await fetch(
-          "https://ergast.com/api/f1/" + args[0] + ".json"
+          `https://ergast.com/api/f1/${askedYear}.json`
         );
 
         let reg = new RegExp(`${args[1]}`, "i");
@@ -44,7 +37,7 @@ export function execute(message, args) {
           round = args[1];
         } else if (args[1] === undefined || !isNaN(args[1])) {
           return message.channel.send(
-            `Enter a keyword to identify a Grand Prix after the \`+podium ${args[0]}\`\n*For example:* \`+podium ${args[0]} british\`, or \`+podium ${args[0]} monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`+podium current last\`. Learn more by using \`+help\` command.`
+            `Enter a keyword to identify a Grand Prix after the \`+podium ${askedYear}\`\n*For example:* \`+podium ${askedYear} british\`, or \`+podium ${askedYear} monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`+podium current last\`. Learn more by using \`+help\` command.`
           );
         } else {
           for (let i = 0; i < races.length; i++) {
@@ -57,15 +50,15 @@ export function execute(message, args) {
             }
           }
 
-          if (round === undefined && args[0] <= currentYear) {
+          if (round === undefined && askedYear <= currentYear) {
             return message.channel.send(
-              `I don't think there was a ${args[1]} race in ${args[0]}!`
+              `I don't think there was a ${args[1]} race in ${askedYear}!`
             );
           }
         }
 
         const secondResponse = await fetch(
-          "https://ergast.com/api/f1/" + args[0] + "/" + round + "/results.json"
+          `https://ergast.com/api/f1/${askedYear}/${round}/results.json`
         );
 
         const secondData = await secondResponse.json();

@@ -5,6 +5,7 @@ export const name = "wdc";
 export const description =
   "This command will give the world driver champion of the specific year";
 export function execute(message, args) {
+  let command = message.content.split(" ")[0];
   let currentYear = new Date().getFullYear();
 
   if (
@@ -12,13 +13,7 @@ export function execute(message, args) {
     args[0] !== "current"
   ) {
     return message.channel.send(
-      `Enter a \`YEAR\` after the \`${
-        message.content.split(" ")[0]
-      }\`,\n*For example:* \`${
-        message.content.split(" ")[0]
-      } 1988\`, \nYou can use \`current\` for the year to check most recent world champion quickly.\n*For example:*\`${
-        message.content.split(" ")[0]
-      } current\`. Learn more by using \`+help\` command.`
+      `Enter a \`YEAR\` after the \`${command}\`,\n*For example:* \`${command} 1988\`, \nYou can use \`current\` for the year to check most recent world champion quickly.\n*For example:*\`${command} current\`. Learn more by using \`+help\` command.`
     );
   } else if (
     args[0] > currentYear &&
