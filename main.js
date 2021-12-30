@@ -90,6 +90,15 @@ client.on("messageCreate", (message) => {
   ) {
     client.commands.get("standings").execute(message, args);
   }
+
+  if (
+    command === "schedule" ||
+    command === "program" ||
+    command === "calendar" ||
+    command === "cal"
+  ) {
+    client.commands.get("schedule").execute(message, args);
+  }
 });
 
 client.login(process.env.BOT_TOKEN);
