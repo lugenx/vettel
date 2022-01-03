@@ -43,6 +43,10 @@ client.on("messageCreate", (message) => {
 
   const command = args.shift().toLowerCase();
 
+  if (command === "help") {
+    client.commands.get("help").execute(message, args);
+  }
+
   if (command === "why") {
     client.commands.get("why").execute(message, args);
   }
