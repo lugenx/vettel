@@ -11,7 +11,8 @@ export function execute(message, args) {
     args[1] !== "last"
   ) {
     return message.channel.send(
-      `Enter a \`YEAR\` after the \`+winner\`, then a keyword to identify a Grand Prix.\n*For example:* \`+winner 2011 canada\`, or \`+winner 1971 monza\`\nYou can use \`current\` for the year and \`last\` for the round of GP if you want to check most recent race quickly.\n*For example:*\`+winner current last\`. Learn more by using \`+help\` command.`
+      `Enter a \`YEAR\` after the \`+winner\`, then a keyword to identify a Grand Prix.\n*For example:* \`+winner 2011 canada\`, or \`+winner 1971 monza\`. Learn more by using \`+help\` command.`
+      //\nYou can use \`current\` for the year and \`last\` for the round of GP if you want to check most recent race quickly.\n*For example:*\`+winner current last\`
     );
   } else if (
     args[0] > currentYear &&
@@ -36,7 +37,8 @@ export function execute(message, args) {
           round = args[1];
         } else if (args[1] === undefined || !isNaN(args[1])) {
           return message.channel.send(
-            `Enter a keyword to identify a Grand Prix after the \`+winner ${args[0]}\`\n*For example:* \`+winner ${args[0]} british\`, or \`+winner ${args[0]} monza\`\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`+winner current last\`. Learn more by using \`+help\` command.`
+            `Enter a keyword to identify a Grand Prix after the \`+winner ${args[0]}\`\n*For example:* \`+winner ${args[0]} british\`, or \`+winner ${args[0]} monza\`. Learn more by using \`+help\` command.`
+            //\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`+winner current last\`
           );
         } else {
           for (let i = 0; i < races.length; i++) {

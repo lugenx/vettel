@@ -13,7 +13,8 @@ export function execute(message, args) {
     args[0] !== "current"
   ) {
     return message.channel.send(
-      `Enter a \`YEAR\` after the \`${command}\`,\n*For example:* \`${command} 1988\`, \nYou can use \`current\` for the year to check most recent world champion quickly.\n*For example:*\`${command} current\`. Learn more by using \`+help\` command.`
+      `Enter a \`YEAR\` after the \`${command}\`,\n*For example:* \`${command} 1988\`. Learn more by using \`+help\` command.`
+      //, \nYou can use \`current\` for the year to check most recent world champion quickly.\n*For example:*\`${command} current\`
     );
   } else if (
     args[0] > currentYear &&

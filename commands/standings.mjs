@@ -9,7 +9,8 @@ export function execute(message, args) {
 
   if ((askedYear.length !== 4 || isNaN(askedYear)) && askedYear !== "current") {
     return message.channel.send(
-      `Enter a \`YEAR\` after the \`${command}\`,\n*For example:* \`${command} 1988\`, \nYou can use \`current\` for the year to check current standings quickly.\n*For example:*\`${command} current\`. Learn more by using \`+help\` command.`
+      `Enter a \`YEAR\` after the \`${command}\`,\n*For example:* \`${command} 1988\`. Learn more by using \`+help\` command.`
+      //, \nYou can use \`current\` for the year to check current standings quickly.\n*For example:*\`${command} current\`
     );
   } else if (
     askedYear > currentYear &&
