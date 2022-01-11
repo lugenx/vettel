@@ -35,7 +35,7 @@ export function execute(message, args) {
 
         let standings = driverStandings.map(
           (p) =>
-            `${p.position}  ${p.Driver.givenName[0]}. ${p.Driver.familyName} (${p.Constructors[0].name})  -  ${p.points} points`
+            `${p.position}  ${p.Driver.givenName[0]}. ${p.Driver.familyName}  -  ${p.points} points`
         );
 
         message.channel.send(

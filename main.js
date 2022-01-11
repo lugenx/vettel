@@ -103,6 +103,15 @@ client.on("messageCreate", (message) => {
   ) {
     client.commands.get("schedule").execute(message, args);
   }
+
+  if (
+    command === "teams" ||
+    command === "constructors" ||
+    command === "teamstand" ||
+    command === "teamstandings"
+  ) {
+    client.commands.get("teams").execute(message, args);
+  }
 });
 
 client.login(process.env.BOT_TOKEN);
