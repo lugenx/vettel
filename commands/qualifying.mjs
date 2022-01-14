@@ -2,43 +2,38 @@ import fetch from "node-fetch";
 export const name = "qualifying";
 export const description = "This command will give qualifying results of a gp";
 export function execute(message, args) {
-  let command = message.content.split(" ")[0];
-  let currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
 
-  if (
-    (args[0] === undefined || args[0].length !== 4 || isNaN(args[0])) &&
-    args[0] !== "current" &&
-    args[1] !== "last"
-  ) {
+  //User inputs: +command firstArg secondArg
+  const command = message.content.split(" ")[0];
+  const firstArg = args[0];
+  const firstArgIsAYear =
+    firstArg && firstArg.length === 4 && !isNaN(firstArg) && firstArg < 3000;
+  const secondArg = args[1];
+  const secondArgIsAKeyword = secondArg && isNaN(secondArg);
+  if (!firstArgIsAYear && firstArg !== "current") {
     return message.channel.send(
       `Enter a \`YEAR\` after the \`${command}\`, then a keyword to identify a Grand Prix.\n*For example:* \`${command} 2011 canada\`, or \`${command} 1971 monza\`. Learn more by using \`+help\` command.`
-      //\nYou can use \`current\` for the year and \`last\` for the GP to check most recent qualifying result quickly.\n*For example:*\`${command} current last\`.
     );
-  } else if (
-    args[0] > currentYear &&
-    !isNaN(args[0]) &&
-    args[0] !== undefined &&
-    args[0].length === 4
-  ) {
-    return message.channel.send(`${args[0]}? Honestly... How do I know?`);
+  } else if (firstArgIsAYear && firstArg > currentYear) {
+    return message.channel.send(`${firstArg}? Honestly... How do I know?`);
   } else {
     async function result() {
       try {
         const firstResponse = await fetch(
-          "https://ergast.com/api/f1/" + args[0] + ".json"
+          "https://ergast.com/api/f1/" + firstArg + ".json"
         );
 
-        let reg = new RegExp(`${args[1]}`, "i");
+        let reg = new RegExp(`${secondArg}`, "i");
         let round;
         let firstData = await firstResponse.json();
         const races = await firstData.MRData.RaceTable.Races;
 
-        if (args[1] === "last") {
-          round = args[1];
-        } else if (args[1] === undefined || !isNaN(args[1])) {
+        if (secondArg === "last") {
+          round = secondArg;
+        } else if (!secondArgIsAKeyword) {
           return message.channel.send(
             `Enter a keyword to identify a Grand Prix after the \`${message}\`\n*For example:* \`${message.content} british\`, or \`${message.content} monza\`. Learn more by using \`+help\` command.`
-            //\nYou can use \`current\` for the year and \`last\` for the GP to check most recent qualifying result quickly.\n*For example:*\`${message.content} current last\`
           );
         } else {
           for (let i = 0; i < races.length; i++) {
@@ -51,19 +46,18 @@ export function execute(message, args) {
             }
           }
 
-          if (round === undefined && args[0] <= currentYear) {
+          if (
+            round === undefined &&
+            (firstArg <= currentYear || firstArg === "current")
+          ) {
             return message.channel.send(
-              `I don't think there was a ${args[1]} race in ${args[0]}!`
+              `I don't think there was a ${secondArg} race in the ${firstArg} year!`
             );
           }
         }
 
         const secondResponse = await fetch(
-          "https://ergast.com/api/f1/" +
-            args[0] +
-            "/" +
-            round +
-            "/qualifying.json"
+          `https://ergast.com/api/f1/${firstArg}/${round}/qualifying.json`
         );
 
         const secondData = await secondResponse.json();
@@ -90,11 +84,9 @@ export function execute(message, args) {
               driverQualiResult
           );
         }
-
+        let driversResultListStr = driversResultList.join("\n");
         message.channel.send(
-          `Here is the **Qualifying** result of **${season} ${gpName}**. \n ${driversResultList.join(
-            " \n"
-          )}`
+          `Here is the **Qualifying** result of **${season} ${gpName}**. \n ${driversResultListStr}`
         );
       } catch (err) {
         console.log(err);

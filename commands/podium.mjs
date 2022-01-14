@@ -17,7 +17,6 @@ export function execute(message, args) {
     return message.channel.send(
       `Enter a \`YEAR\` after the \`${command}\`, then a keyword to identify a Grand Prix.\n*For example:* \`${command} 2011 canada\`, or \`${command} 1971 monza\`. Learn more by using \`+help\` command.`
     );
-    //\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`${command} current last\`.
   } else if (firstArgIsAYear && firstArg > currentYear) {
     return message.channel.send(`${firstArg}? Really?`);
   } else {
@@ -89,11 +88,9 @@ export function execute(message, args) {
               time
           );
         }
-
+        let driversResultListStr = driversResultList.join("\n");
         message.channel.send(
-          `Here is the podium of **${season} ${gpName}**. \n ${driversResultList.join(
-            " \n"
-          )}`
+          `Here is the podium of **${season} ${gpName}**. \n ${driversResultListStr}`
         );
       } catch (err) {
         console.log(err);
