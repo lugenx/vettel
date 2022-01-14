@@ -21,7 +21,6 @@ export function execute(message, args) {
     return message.channel.send(`Well ${firstArg} is not here yet...`);
   } else {
     async function result() {
-      // block doesn't execute, fix it
       try {
         const response = await fetch(
           `https://ergast.com/api/f1/${firstArg}/constructorStandings.json`
@@ -37,17 +36,15 @@ export function execute(message, args) {
         let standings = teamStandings.map(
           (p) => `${p.position}  ${p.Constructor.name}  -  ${p.points} points`
         );
-        console.log(standings);
+        let standingsStr = standings.join("\n");
         message.channel.send(
-          `Here is the constructor standings of **${season}** season. \n ${standings.join(
-            " \n"
-          )}`
+          `Here is the constructor standings of **${season}** season. \n ${standingsStr}`
         );
       } catch (err) {
         console.log(err);
         message.channel.send("hmm :thinking:");
       }
     }
-    return result;
+    return result();
   }
 }
