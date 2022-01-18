@@ -21,7 +21,7 @@ export function execute(message, args) {
     async function result() {
       try {
         const firstResponse = await fetch(
-          "https://ergast.com/api/f1/" + firstArg + ".json"
+          `https://ergast.com/api/f1/${firstArg}.json`
         );
 
         let reg = new RegExp(`${secondArg}`, "i");
