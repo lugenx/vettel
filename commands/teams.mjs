@@ -19,32 +19,32 @@ export function execute(message, args) {
 
   if (firstArgIsAYear && firstArg > currentYear) {
     return message.channel.send(`Well ${firstArg} is not here yet...`);
-  } else {
-    async function result() {
-      try {
-        const response = await fetch(
-          `https://ergast.com/api/f1/${firstArg}/constructorStandings.json`
-        );
-
-        const data = await response.json();
-
-        const table = await data.MRData.StandingsTable;
-        const standingList = await table.StandingsLists[0];
-        const teamStandings = await standingList.ConstructorStandings;
-        const season = await standingList.season;
-
-        let standings = teamStandings.map(
-          (p) => `${p.position}  ${p.Constructor.name}  -  ${p.points} points`
-        );
-        let standingsStr = standings.join("\n");
-        message.channel.send(
-          `Here is the constructor standings of **${season}** season. \n ${standingsStr}`
-        );
-      } catch (err) {
-        console.log(err);
-        message.channel.send("hmm :thinking:");
-      }
-    }
-    return result();
   }
+
+  async function result() {
+    try {
+      const response = await fetch(
+        `https://ergast.com/api/f1/${firstArg}/constructorStandings.json`
+      );
+
+      const data = await response.json();
+
+      const table = await data.MRData.StandingsTable;
+      const standingList = await table.StandingsLists[0];
+      const teamStandings = await standingList.ConstructorStandings;
+      const season = await standingList.season;
+
+      let standings = teamStandings.map(
+        (p) => `${p.position}  ${p.Constructor.name}  -  ${p.points} points`
+      );
+      let standingsStr = standings.join("\n");
+      message.channel.send(
+        `Here is the constructor standings of **${season}** season. \n ${standingsStr}`
+      );
+    } catch (err) {
+      console.log(err);
+      message.channel.send("hmm :thinking:");
+    }
+  }
+  return result();
 }
