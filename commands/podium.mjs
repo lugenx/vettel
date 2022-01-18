@@ -37,7 +37,6 @@ export function execute(message, args) {
           return message.channel.send(
             `Enter a keyword to identify a Grand Prix after the \`+podium ${firstArg}\`\n*For example:* \`+podium ${firstArg} british\`, or \`+podium ${firstArg} monza\`. Learn more by using \`+help\` command.`
           );
-          //\nYou can use \`current\` for the year and \`last\` for the GP to check most recent race quickly.\n*For example:*\`+podium current last\`.
         } else {
           for (let i = 0; i < races.length; i++) {
             if (
@@ -76,16 +75,9 @@ export function execute(message, args) {
             ? raceResults[r].Time.time
             : raceResults[r].status;
           driversResultList.push(
-            r +
-              1 +
-              " " +
-              raceResults[r].Driver.givenName +
-              " " +
-              raceResults[r].Driver.familyName +
-              " (" +
-              raceResults[r].Constructor.name +
-              ") " +
-              time
+            `${r + 1} ${raceResults[r].Driver.givenName} ${
+              raceResults[r].Driver.familyName
+            } (${raceResults[r].Constructor.name}) ${time}`
           );
         }
         let driversResultListStr = driversResultList.join("\n");
