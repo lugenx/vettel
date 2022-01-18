@@ -17,76 +17,78 @@ export function execute(message, args) {
     return message.channel.send(
       `Enter a \`YEAR\` after the \`${command}\`, then a keyword to identify a Grand Prix.\n*For example:* \`${command} 2011 canada\`, or \`${command} 1971 monza\`. Learn more by using \`+help\` command.`
     );
-  } else if (firstArgIsAYear && firstArg > currentYear) {
-    return message.channel.send(`${firstArg}? Honestly... Are you kidding me?`);
-  } else {
-    async function result() {
-      try {
-        const firstResponse = await fetch(
-          `https://ergast.com/api/f1/${firstArg}.json`
-        );
-
-        let reg = new RegExp(`${secondArg}`, "i");
-        let round;
-        let firstData = await firstResponse.json();
-        const races = await firstData.MRData.RaceTable.Races;
-
-        if (secondArg === "last") {
-          round = args[1];
-        } else if (!secondArgIsAKeyword) {
-          return message.channel.send(
-            `Enter a keyword to identify a Grand Prix after the \`${message}\`\n*For example:* \`${message.content} british\`, or \`${message.content} monza\`. Learn more by using \`+help\` command.`
-          );
-        } else {
-          for (let i = 0; i < races.length; i++) {
-            if (
-              reg.test(races[i].raceName) ||
-              reg.test(races[i].Circuit.circuitName) ||
-              reg.test(races[i].Circuit.Location.country)
-            ) {
-              round = races[i].round;
-            }
-          }
-
-          if (
-            round === undefined &&
-            (firstArg <= currentYear || firstArg === "current")
-          ) {
-            return message.channel.send(
-              `I don't think there was a ${secondArg} race in the ${firstArg} year!`
-            );
-          }
-        }
-
-        const secondResponse = await fetch(
-          `https://ergast.com/api/f1/${firstArg}/${round}/results.json`
-        );
-
-        const secondData = await secondResponse.json();
-        const race = await secondData.MRData.RaceTable.Races[0];
-        const raceResults = await race.Results;
-        const gpName = await race.raceName;
-        const season = await race.season;
-
-        const driversResultList = [];
-
-        for (let r = 0; r < raceResults.length; r++) {
-          let time = raceResults[r].hasOwnProperty("Time")
-            ? raceResults[r].Time.time
-            : raceResults[r].status;
-          driversResultList.push(
-            `${r + 1} ${raceResults[r].Driver.familyName} (${time})`
-          );
-        }
-        let driversResultListStr = driversResultList.join("\n");
-        message.channel.send(
-          `Here is the result of **${season} ${gpName}**. \n ${driversResultListStr}`
-        );
-      } catch (err) {
-        console.log(err);
-        message.channel.send("hmm...:thinking:");
-      }
-    }
-    return result();
   }
+
+  if (firstArgIsAYear && firstArg > currentYear) {
+    return message.channel.send(`${firstArg}? Honestly... Are you kidding me?`);
+  }
+
+  async function result() {
+    try {
+      const firstResponse = await fetch(
+        `https://ergast.com/api/f1/${firstArg}.json`
+      );
+
+      let reg = new RegExp(`${secondArg}`, "i");
+      let round;
+      let firstData = await firstResponse.json();
+      const races = await firstData.MRData.RaceTable.Races;
+
+      if (secondArg === "last") {
+        round = args[1];
+      } else if (!secondArgIsAKeyword) {
+        return message.channel.send(
+          `Enter a keyword to identify a Grand Prix after the \`${message}\`\n*For example:* \`${message.content} british\`, or \`${message.content} monza\`. Learn more by using \`+help\` command.`
+        );
+      } else {
+        for (let i = 0; i < races.length; i++) {
+          if (
+            reg.test(races[i].raceName) ||
+            reg.test(races[i].Circuit.circuitName) ||
+            reg.test(races[i].Circuit.Location.country)
+          ) {
+            round = races[i].round;
+          }
+        }
+
+        if (
+          round === undefined &&
+          (firstArg <= currentYear || firstArg === "current")
+        ) {
+          return message.channel.send(
+            `I don't think there was a ${secondArg} race in the ${firstArg} year!`
+          );
+        }
+      }
+
+      const secondResponse = await fetch(
+        `https://ergast.com/api/f1/${firstArg}/${round}/results.json`
+      );
+
+      const secondData = await secondResponse.json();
+      const race = await secondData.MRData.RaceTable.Races[0];
+      const raceResults = await race.Results;
+      const gpName = await race.raceName;
+      const season = await race.season;
+
+      const driversResultList = [];
+
+      for (let r = 0; r < raceResults.length; r++) {
+        let time = raceResults[r].hasOwnProperty("Time")
+          ? raceResults[r].Time.time
+          : raceResults[r].status;
+        driversResultList.push(
+          `${r + 1} ${raceResults[r].Driver.familyName} (${time})`
+        );
+      }
+      let driversResultListStr = driversResultList.join("\n");
+      message.channel.send(
+        `Here is the result of **${season} ${gpName}**. \n ${driversResultListStr}`
+      );
+    } catch (err) {
+      console.log(err);
+      message.channel.send("hmm...:thinking:");
+    }
+  }
+  return result();
 }
