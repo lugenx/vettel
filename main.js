@@ -55,16 +55,8 @@ client.on("messageCreate", (message) => {
     client.commands.get("hello").execute(message, args);
   }
 
-  if (command === "rule" || command === "rules") {
-    client.commands.get("rules").execute(message, args);
-  }
-
   if (command === "last" || command === "latest" || command === "recent") {
     client.commands.get("last").execute(message, args);
-  }
-
-  if (command === "embed") {
-    client.commands.get("embed").execute(message, args);
   }
 
   if (command === "result" || command === "results" || command === "race") {
