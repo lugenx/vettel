@@ -53,10 +53,17 @@ export function execute(message, args) {
 
         if (
           round === undefined &&
-          (firstArg <= currentYear || firstArg === "current")
+          ((1950 <= firstArg && firstArg <= currentYear) ||
+            firstArg === "current")
         ) {
           return message.channel.send(
             `I don't think there was a ${secondArg} race in the ${firstArg} year!`
+          );
+        }
+
+        if (firstArg < 1950) {
+          return message.channel.send(
+            `There wasn't a GP in ${firstArg}. The First Formula 1 race was on **May 13, 1950**, at Silverstone.`
           );
         }
       }
