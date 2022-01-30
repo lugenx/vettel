@@ -18,6 +18,12 @@ export function execute(message, args) {
     );
   }
 
+  if (argIsAYear && arg < 1950) {
+    return message.channel.send(
+      `There wasn't a Championship in ${arg}. The First Formula 1 Drivers' Championship was in **1950**.`
+    );
+  }
+
   if (argIsAYear && arg > currentYear) {
     return message.channel.send(
       `The world champion of ${arg} huh? We'll see. Hopefully.`

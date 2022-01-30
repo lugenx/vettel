@@ -5,26 +5,31 @@ export const description =
 export function execute(message, args) {
   const currentYear = new Date().getFullYear();
 
-  //User inputs: +command firstArg secondArg
+  //User inputs: +command arg
   const command = message.content.split(" ")[0];
-  const firstArg = args[0];
-  const firstArgIsAYear =
-    firstArg && firstArg.length === 4 && !isNaN(firstArg) && firstArg < 3000;
+  const arg = args[0];
+  const argIsAYear = arg && arg.length === 4 && !isNaN(arg) && arg < 3000;
 
-  if (!firstArgIsAYear && firstArg !== "current") {
+  if (!argIsAYear && arg !== "current") {
     return message.channel.send(
       `Enter a \`YEAR\` after the \`${command}\`,\n*For example:* \`${command} 1988\`. Learn more by using \`+help\` command.`
     );
   }
 
-  if (firstArgIsAYear && firstArg > currentYear) {
-    return message.channel.send(`Well ${firstArg} is not here yet...`);
+  if (argIsAYear && arg < 1958) {
+    return message.channel.send(
+      `There wasn't a Constructors' Championship in ${arg}. The First Constructors' title was awarded in **1958**.`
+    );
+  }
+
+  if (argIsAYear && arg > currentYear) {
+    return message.channel.send(`Well ${arg} is not here yet...`);
   }
 
   async function result() {
     try {
       const response = await fetch(
-        `https://ergast.com/api/f1/${firstArg}/constructorStandings.json`
+        `https://ergast.com/api/f1/${arg}/constructorStandings.json`
       );
 
       const data = await response.json();
