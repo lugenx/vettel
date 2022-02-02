@@ -104,6 +104,14 @@ client.on("messageCreate", (message) => {
   ) {
     client.commands.get("teams").execute(message, args);
   }
+
+  if (
+    command === "wcc" ||
+    command === "championteam" ||
+    command === "champteam"
+  ) {
+    client.commands.get("wcc").execute(message, args);
+  }
 });
 
 client.login(process.env.BOT_TOKEN);
