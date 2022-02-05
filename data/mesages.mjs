@@ -2,30 +2,24 @@ export const firstGreetings = ["Hey", "Hello", "Hi"];
 
 export const secondGreetings = [
   "how are you",
+  "how's it going",
+  "how have you been",
+  "how's everything",
   "how are you doing",
+  "how are things going?",
+  "what's going on",
   "what's up",
   "wassup",
+  "what's new?",
+  "what are you up to",
 ];
 
-export const funnyNames = [
-  "homie",
-  "buddy",
-  "bro",
-  "man",
-  "sis",
-  "pal",
-  "brother",
-  "papa",
-  "mama",
-  "sir",
-];
+export const funnyNames = ["homie", "buddy", "bro", "pal", "mate", "boss"];
 
 export const preJoke = [
   "I have a joke for you,",
-  "Joke is coming...",
   "Wanna hear a joke?",
   "Let me tell you a joke!",
-  "One joke",
   "What do you think about this joke?",
   "Did you hear this joke?",
   "Listen...,",
