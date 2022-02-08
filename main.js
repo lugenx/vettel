@@ -112,6 +112,10 @@ client.on("messageCreate", (message) => {
   ) {
     client.commands.get("wcc").execute(message, args);
   }
+
+  if (command === "joke") {
+    client.commands.get("joke").execute(message, args);
+  }
 });
 
 client.login(process.env.BOT_TOKEN);
