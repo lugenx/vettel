@@ -7,7 +7,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+  intents: 131071,
+  partials: [
+    "CHANNEL",
+    "GUILD_MEMBER",
+    "GUILD_SCHEDULED_EVENT",
+    "MESSAGE",
+    "REACTION",
+    "USER",
+  ],
 });
 
 const prefix = "+";

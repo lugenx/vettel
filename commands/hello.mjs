@@ -15,13 +15,4 @@ export const execute = function (message, args) {
       secondGreetings
     )}, ${randomMsg(funnyNames)}? ${randomMsg(preJoke)}\n${randomMsg(jokes)}`
   );
-
-  if (message.channel.type == "DM") {
-    // message.reply("You are DMing me now!");
-    message.author.send(
-      `${randomMsg(firstGreetings)} ${message.author.username}, ${randomMsg(
-        secondGreetings
-      )}, ${randomMsg(funnyNames)}? ${randomMsg(preJoke)}\n${randomMsg(jokes)}`
-    );
-  }
 };
